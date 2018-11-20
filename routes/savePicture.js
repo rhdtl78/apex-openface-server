@@ -4,7 +4,13 @@ var fs = require("fs");
 var multer = require("multer");
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, "inferImages/");
+    try {
+      cb(null, "inferImages/");      
+    } catch (error) {
+      console.log(error);
+      fs.mkdirSync('inferImages');
+      cb(null, 'inferImages/')
+    }
   },
   filename: function(req, file, cb) {
     cb(null, file.originalname);
