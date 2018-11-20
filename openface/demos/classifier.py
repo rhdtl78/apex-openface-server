@@ -291,4 +291,4 @@ Use `--networkModel` to set a non-standard Torch network model.""")
     if args.mode == 'train':
         train(args)
     elif args.mode == 'infer':
-        return infer(args, args.multi)
+        infer(args, args.multi)
