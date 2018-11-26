@@ -35,8 +35,7 @@ RUN cd ./openface && \
     pip2 install -r requirements.txt && \
     python2 setup.py install && \
     pip2 install --user --ignore-installed -r demos/web/requirements.txt && \
-    pip2 install -r training/requirements.txt
-
+    pip2 install -r training/requirements.txt && \
 
 RUN npm install
 
