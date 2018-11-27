@@ -35,18 +35,16 @@ router.post("/", uploadDir.single("file"), function(req, res, next) {
       // if (stderr) throw stderr;
       let result = JSON.parse(stdout);
       const Log = new Logs({
-        name: result.confidence,
-        date: Date.now,
+        name: result.predict,
         confidence: result.confidence
       });
       Log.save();
-      console.log(result);
+      res.json(result);
     });
   } catch (err) {
     console.log(err);
   }
 
-  res.send({ message: "image uploaded" });
 });
 
 router.get("/", function(req, res, next) {});
