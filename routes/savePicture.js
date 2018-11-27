@@ -17,7 +17,6 @@ var storage = multer.diskStorage({
   }
 });
 
-const Logs = require("../models/log");
 const shell = require("shelljs");
 require("date-utils");
 
@@ -32,13 +31,8 @@ router.post("/", uploadDir.single("file"), function(req, res, next) {
   console.log(req.file);
   try {
     shell.exec("scripts/infer.sh", function(code, stdout, stderr) {
-      // if (stderr) throw stderr;
       let result = JSON.parse(stdout);
-      const Log = new Logs({
-        name: result.predict,
-        confidence: result.confidence
-      });
-      Log.save();
+      
       res.json(result);
     });
   } catch (err) {
