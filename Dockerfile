@@ -8,6 +8,7 @@ RUN git clone https://github.com/rhdtl78/apex-openface-server.git
 
 WORKDIR /root/apex-openface-server/
 RUN npm install
+ADD . ./inferImages
 
 EXPOSE 8000 9000 3000
 
