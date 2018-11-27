@@ -1,3 +1,4 @@
 #!/bin/bash
+DIR = /root/apex-openface-server
 
-$(pwd)/openface/demos/classifier.py infer $(pwd)/openface/generated-embeddings/classifier.pkl $(pwd)/inferImages/image.jpg
+$DIR/openface/demos/classifier.py infer $DIR/openface/generated-embeddings/classifier.pkl $DIR/inferImages/image.jpg
