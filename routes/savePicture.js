@@ -31,6 +31,12 @@ router.post("/", uploadDir.single("file"), function(req, res, next) {
   console.log(req.file);
   try {
     shell.exec("scripts/infer.sh", function(code, stdout, stderr) {
+      if (stderr) {
+        if (stderr.match("Unable to find a face")) {
+          throw "얼굴을 찾을 수 없음"
+        }
+
+      }
       let result = JSON.parse(stdout);
       
       res.json(result);
