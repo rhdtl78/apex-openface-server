@@ -7,13 +7,13 @@ require("date-utils");
 
 router.post("/", function(req, res, next) {
     
-  const { name } = req.body;
+  const { name, confidence } = req.body;
   try {
     shell.exec(`scripts/train.sh ./inferImages/image.jpg ${name}`, function(code, stdout, stderr) {
       if (stderr) throw stderr;
       const Log = new Logs({
         name: name,
-        confidence: result.confidence
+        confidence: confidence
       });
       Log.save();
       res.json({ message: "trained successfully" });
