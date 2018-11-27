@@ -27,6 +27,7 @@ import cv2
 import os
 import pickle
 import sys
+import json
 
 from operator import itemgetter
 
@@ -40,8 +41,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
-from sklearn.mixture import GMM
+from sklearn.model_selection import GridSearchCV
+from sklearn.mixture import GaussianMixture as GMM
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 
@@ -179,7 +180,7 @@ def infer(args, multiple=False):
                 (le, clf) = pickle.load(f, encoding='latin1')
 
     for img in args.imgs:
-        print("\n=== {} ===".format(img))
+        # print("\n=== {} ===".format(img))
         reps = getRep(img, multiple)
         if len(reps) > 1:
             print("List of faces in image from left to right")
@@ -189,18 +190,19 @@ def infer(args, multiple=False):
             start = time.time()
             predictions = clf.predict_proba(rep).ravel()
             maxI = np.argmax(predictions)
-            person = le.inverse_transform(maxI)
+            person = le.inverse_transform([maxI])
             confidence = predictions[maxI]
-            # if args.verbose:
-            #     print("Prediction took {} seconds.".format(time.time() - start))
-            # if multiple:
-            #     print("Predict {} @ x={} with {:.2f} confidence.".format(person.decode('utf-8'), bbx,
-            #                                                              confidence))
-            # else:
-            #     print("Predict {} with {:.2f} confidence.".format(person.decode('utf-8'), confidence))
-            # if isinstance(clf, GMM):
-            #     dist = np.linalg.norm(rep - clf.means_[maxI])
-            #     print("  + Distance from the mean: {}".format(dist))
+            if args.verbose:
+                print("Prediction took {} seconds.".format(time.time() - start))
+            if multiple:
+                print("Predict {} @ x={} with {:.2f} confidence.".format(person.decode('utf-8'), bbx,
+                                                                         confidence))
+            else:
+                response = { "predict" : person[0], "confidence" : confidence }
+		print(json.dumps(response))
+            if isinstance(clf, GMM):
+                dist = np.linalg.norm(rep - clf.means_[maxI])
+                print("  + Distance from the mean: {}".format(dist))
 
 
 
