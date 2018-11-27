@@ -32,7 +32,7 @@ router.post("/", uploadDir.single("file"), function(req, res, next) {
   console.log(req.file);
   try {
     shell.exec("scripts/infer.sh", function(code, stdout, stderr) {
-      if (stderr) throw stderr;
+      // if (stderr) throw stderr;
       let result = JSON.parse(stdout);
       const Log = new Logs({
         name: result.confidence,
